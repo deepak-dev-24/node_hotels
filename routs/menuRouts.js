@@ -49,4 +49,42 @@ router.get('/:tast', async (req,res)=>{
   }
 });
 
+router.put('/:id', async (req,res)=>{
+  try{
+    const menuId = req.params.id;
+    const updataedMenuData = req.body;
+    const response = await Menu.findByIdAndUpdate(menuId,updataedMenuData,{
+      new:true,
+      runValidators: true,
+    })
+    console.log('Data updated');
+    res.status(200).json(response);
+
+    if(!response){
+      return res.status(404).json({error: 'Person not found'});
+    }
+
+  }
+  catch(err){ 
+    console.log(err);
+    res.status(500).json({error: 'Internal Server Error'});
+  }
+});
+
+router.delete('/:id',async (req,res)=>{
+  try{
+    const menuId = req.params.id;
+    const response = await Menu.findByIdAndDelete(menuId);
+    if(!response){
+      return res.status(404).json({error: 'Person not found'});
+    }
+    console.log('data deleted');
+    res.status(200).json({message: 'person Deleted Successfully'});
+  }
+  catch(err){
+    console.log(err);
+    res.status(500).json({error: 'Internal Server Error'});
+  }
+})
+
 module.exports = router;
