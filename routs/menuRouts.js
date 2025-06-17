@@ -29,12 +29,23 @@ router.get('/', async (req,res)=>{
   }
 });
 
-router.get('/:tast', (req,res)=>{
+router.get('/:tast', async (req,res)=>{
   try{
+    const tast = req.params.tast;
+    if(tast == 'sweet' || tast == 'spicy' || tast == 'sour'){
+      
+      const response = await Menu.find({taste: tast});
+      console.log('response fetched');
+      res.status(200).json(response);
 
+    }else{
+      res.status(404).json({error: 'Invalid work type'});
+    }
+    
   }
   catch(err){
-    
+      console.log(err);
+      res.status(500).json({error: 'Internal Server Error'});
   }
 });
 
